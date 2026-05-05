@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoMusic Academy — Payroll Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #000000;
+      --card:    #1A1A1A;
+      --accent:  #E8294C;
+      --hover:   #FF4D6D;
+      --text:    #FFFFFF;
+      --muted:   #888888;
+      --border:  #2A2A2A;
+      --warn:    #FF4D6D;
+      --input:   #111111;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    /* ── CREDENTIALS MODAL ── */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 20px;
+    }
+
+    .modal {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .modal-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .modal-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .modal-logo h2 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .modal-logo p {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .modal h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .modal > p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .modal-field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 14px;
+    }
+
+    .modal-field label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .modal-field input {
+      background: var(--input);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.85rem;
+      padding: 10px 12px;
+      outline: none;
+      transition: border-color 0.15s;
+      width: 100%;
+    }
+
+    .modal-field input:focus { border-color: var(--accent); }
+
+    .modal-field input.mono {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.02em;
+    }
+
+    .modal-error {
+      font-size: 0.78rem;
+      color: var(--warn);
+      margin-bottom: 14px;
+      display: none;
+    }
+
+    .modal-footer {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .btn-save {
+      flex: 1;
+      height: 42px;
+      background: var(--accent);
+      border: none;
+      border-radius: 9px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-save:hover { background: var(--hover); }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-top {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+      animation: blink 2s ease-in-out infinite;
+    }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    .brand-text h1 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-text p {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-weight: 500;
+      margin-top: 1px;
+    }
+
+    .btn-settings {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn-settings:hover { border-color: var(--accent); color: var(--text); }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-end;
+      padding-bottom: 16px;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .filter-group label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .filter-bar input[type="date"],
+    .filter-bar select {
+      background: var(--input);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 8px 12px;
+      height: 38px;
+      outline: none;
+      transition: border-color 0.15s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .filter-bar input[type="date"]:focus,
+    .filter-bar select:focus { border-color: var(--accent); }
+
+    .filter-bar select {
+      padding-right: 32px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      min-width: 200px;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(0.6);
+      cursor: pointer;
+    }
+
+    .btn-buscar {
+      height: 38px;
+      padding: 0 20px;
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      align-self: flex-end;
+      white-space: nowrap;
+    }
+
+    .btn-buscar:hover  { background: var(--hover); }
+    .btn-buscar:active { transform: scale(0.97); }
+    .btn-buscar:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+
+    /* ── SUMMARY ── */
+    .summary-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px 28px;
+      margin-bottom: 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 480px) { .summary-card { grid-template-columns: 1fr; } }
+
+    .stat label {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .stat .val {
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat .val sup {
+      font-size: 1.3rem;
+      font-weight: 700;
+      vertical-align: super;
+      margin-right: 2px;
+    }
+
+    /* ── LOADING ── */
+    .loading-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding: 60px 20px;
+    }
+
+    .spinner {
+      width: 42px;
+      height: 42px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #loadingText {
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    /* ── ERROR ── */
+    .error-box {
+      background: rgba(232,41,76,.08);
+      border: 1px solid rgba(232,41,76,.35);
+      border-radius: 12px;
+      padding: 14px 18px;
+      color: var(--accent);
+      font-size: 0.875rem;
+      margin-bottom: 20px;
+    }
+
+    /* ── EMPTY ── */
+    .empty-results {
+      text-align: center;
+      color: var(--muted);
+      padding: 48px 20px;
+      font-size: 0.9rem;
+    }
+
+    /* ── GRID ── */
+    .staff-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 16px;
+    }
+
+    @media (max-width: 380px) { .staff-grid { grid-template-columns: 1fr; } }
+
+    /* ── STAFF CARD ── */
+    .staff-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .staff-card:hover { border-color: #3a3a3a; }
+
+    .staff-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .staff-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      line-height: 1.3;
+    }
+
+    .staff-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .badge {
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    .staff-total {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    /* ── APPOINTMENT ROWS ── */
+    .appt-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 18px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.12s;
+    }
+
+    .appt-row:last-child { border-bottom: none; }
+    .appt-row:hover { background: #222; }
+
+    .appt-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .appt-student {
+      font-weight: 600;
+      font-size: 0.84rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .appt-time {
+      font-size: 0.71rem;
+      color: var(--muted);
+    }
+
+    .appt-rate {
+      font-weight: 700;
+      font-size: 0.875rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .appt-rate.no-rate {
+      color: var(--warn);
+      font-size: 0.71rem;
+      font-style: italic;
+      font-weight: 500;
+    }
+
+    /* ── FOOTER ── */
+    .dash-footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.7rem;
+      margin-top: 36px;
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<!-- ── CREDENTIALS MODAL ── -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal">
+    <div class="modal-logo">
+      <div class="modal-dot"></div>
+      <div>
+        <h2>GeoMusic Academy</h2>
+        <p>Payroll Dashboard</p>
+      </div>
+    </div>
+    <h3>Configurar credenciales</h3>
+    <p>Tus credenciales se guardan únicamente en este navegador (localStorage). No se envían a ningún servidor externo.</p>
+    <div class="modal-field">
+      <label>PIT Token</label>
+      <input class="mono" type="password" id="inputToken" placeholder="pit-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" autocomplete="off">
+    </div>
+    <div class="modal-field">
+      <label>Location ID</label>
+      <input class="mono" type="text" id="inputLocation" placeholder="WlcttFpxFSQnNo1iB48V" autocomplete="off">
+    </div>
+    <div class="modal-error" id="modalError">Por favor completa ambos campos.</div>
+    <div class="modal-footer">
+      <button class="btn-save" id="btnSaveCreds">Guardar y continuar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="header-top">
+    <div class="brand">
+      <div class="brand-dot"></div>
+      <div class="brand-text">
+        <h1>GeoMusic Academy</h1>
+        <p>Payroll Dashboard</p>
+      </div>
+    </div>
+    <button class="btn-settings" id="btnSettings">⚙ Credenciales</button>
+  </div>
+
+  <div class="filter-bar">
+    <div class="filter-group">
+      <label>Desde</label>
+      <input type="date" id="dateFrom">
+    </div>
+    <div class="filter-group">
+      <label>Hasta</label>
+      <input type="date" id="dateTo">
+    </div>
+    <div class="filter-group">
+      <label>Profesor</label>
+      <select id="staffFilter">
+        <option value="all">Todos los profesores</option>
+      </select>
+    </div>
+    <button class="btn-buscar" id="btnBuscar">Buscar</button>
+  </div>
+</header>
+
+<main>
+  <div class="summary-card">
+    <div class="stat">
+      <label>Clases asistidas</label>
+      <div class="val" id="totalShowed">—</div>
+    </div>
+    <div class="stat">
+      <label>Total a pagar</label>
+      <div class="val"><sup>$</sup><span id="totalPayNum">—</span></div>
+    </div>
+  </div>
+
+  <div class="error-box hidden" id="errorBox"></div>
+
+  <div class="loading-wrap hidden" id="loadingWrap">
+    <div class="spinner"></div>
+    <div id="loadingText">Cargando citas...</div>
+  </div>
+
+  <div id="resultsArea"></div>
+  <div class="dash-footer hidden" id="dashFooter"></div>
+</main>
+
+<script>
+/* ── CALENDARS ───────────────────────────────────────────────── */
+const CALENDARS = [
+  { name: 'Homework Help & Study Support', id: '6c1uYVcCv7shvPYTIBiC' },
+  { name: 'Fromo Somo',                    id: '7V461wVh10o9LkQ8YIEU' },
+  { name: 'Calendario de ADS',             id: '84KOPAlXvNuwXWG2gTsw' },
+  { name: 'Schedule an Appointment',       id: 'BH89p2TGLZikDxpmlC9n' },
+  { name: 'Marlene Vega',                  id: 'H0RKzsU2PzHE1YzTzWha' },
+  { name: 'Alberto Pablo Rojas Lopez',     id: 'MtWUnQDOYV0hhbpdkOXT' },
+  { name: 'Reserva tu clase Gratis',       id: 'V05rLHKqTupWWuOjy0Tc' },
+  { name: 'Test Preparation',              id: 'VoBbTvBExUcBPfOS3Bys' },
+  { name: 'Reynol del Corral',             id: 'hO4Vq3pN8Lv9Lwt2XEQx' },
+  { name: 'Adriana Suarez',                id: 'ltqxyo27RZf28x4tmRZA' },
+  { name: 'One-on-One Academic Tutoring',  id: 'nVIWIZVFJxewMjDmJ19m' },
+  { name: 'Marielle Bogady',               id: 'oaWxrPOl7O5jg50hWgk4' },
+  { name: 'Oscar Guerra',                  id: 'rWZ7BVn0HKWzO8FcCOaE' },
+  { name: 'Adriana Suárez (2)',            id: 'rhNJzMyXZVUyzVH19UkW' },
+  { name: 'Online Tutoring Sessions',      id: 'uN7XdCI3HLQY4NileCi3' },
+];
+
+const TARIFA_ID = '8bpHdD0VNmqbAkXgEsFU';
+const BASE      = 'https://services.leadconnectorhq.com';
+const STORE_KEY = 'geomusic_creds';
+
+/* ── CREDENTIALS ─────────────────────────────────────────────── */
+function loadCreds() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY)) || null; }
+  catch { return null; }
+}
+
+function saveCreds(token, locationId) {
+  localStorage.setItem(STORE_KEY, JSON.stringify({ token, locationId }));
+}
+
+function getHeaders(token) {
+  return { 'Authorization': `Bearer ${token}`, 'Version': '2021-07-28' };
+}
+
+/* ── MODAL ───────────────────────────────────────────────────── */
+const backdrop = el('modalBackdrop');
+
+function showModal(prefill) {
+  if (prefill) {
+    el('inputToken').value    = prefill.token    || '';
+    el('inputLocation').value = prefill.locationId || '';
+  }
+  backdrop.classList.remove('hidden');
+}
+
+function hideModal() {
+  backdrop.classList.add('hidden');
+}
+
+el('btnSaveCreds').addEventListener('click', () => {
+  const token      = el('inputToken').value.trim();
+  const locationId = el('inputLocation').value.trim();
+  const errEl      = el('modalError');
+
+  if (!token || !locationId) {
+    errEl.style.display = 'block';
+    return;
+  }
+  errEl.style.display = 'none';
+  saveCreds(token, locationId);
+  hideModal();
+  initApp();
+});
+
+el('btnSettings').addEventListener('click', () => {
+  showModal(loadCreds());
+});
+
+// Allow Enter key in modal inputs
+['inputToken','inputLocation'].forEach(id =>
+  el(id).addEventListener('keydown', e => { if (e.key === 'Enter') el('btnSaveCreds').click(); })
+);
+
+/* ── DATE HELPERS ───────────────────────────────────────────── */
+function getMonday(d) {
+  const date = new Date(d);
+  date.setHours(0, 0, 0, 0);
+  const day = date.getDay();
+  date.setDate(date.getDate() - (day === 0 ? 6 : day - 1));
+  return date;
+}
+
+function toDateInput(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+function startOfDay(dateStr) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return new Date(y, m - 1, d, 0, 0, 0, 0).getTime();
+}
+
+function endOfDay(dateStr) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return new Date(y, m - 1, d, 23, 59, 59, 999).getTime();
+}
+
+function fmtDate(iso) {
+  return new Date(iso).toLocaleDateString('es-MX', { weekday: 'short', month: 'short', day: 'numeric' });
+}
+
+function fmtTime(iso) {
+  return new Date(iso).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+}
+
+function fmtMoney(n) {
+  return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function esc(s) {
+  return String(s ?? '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── API ─────────────────────────────────────────────────────── */
+async function apiFetch(path, headers) {
+  const res = await fetch(`${BASE}${path}`, { headers });
+  if (!res.ok) {
+    const txt = await res.text().catch(() => '');
+    throw new Error(`HTTP ${res.status} — ${path.split('?')[0]}\n${txt.slice(0, 200)}`);
+  }
+  return res.json();
+}
+
+async function getEvents(calendarId, startMs, endMs, locationId, headers) {
+  try {
+    const data = await apiFetch(
+      `/calendars/events?locationId=${locationId}&calendarId=${calendarId}&startTime=${startMs}&endTime=${endMs}`,
+      headers
+    );
+    return data.events || [];
+  } catch (e) {
+    console.warn('Events error:', calendarId, e.message);
+    return [];
+  }
+}
+
+async function getContact(id, cache, headers) {
+  if (id in cache) return cache[id];
+  try {
+    const data = await apiFetch(`/contacts/${id}`, headers);
+    cache[id] = data.contact ?? null;
+  } catch {
+    cache[id] = null;
+  }
+  return cache[id];
+}
+
+/* ── RENDER ──────────────────────────────────────────────────── */
+function renderCard(calName, appts) {
+  const total = appts.reduce((s, a) => s + (a.tarifa ?? 0), 0);
+
+  const rows = appts.map(a => `
+    <div class="appt-row">
+      <div class="appt-left">
+        <span class="appt-student">${esc(a.studentName)}</span>
+        <span class="appt-time">${fmtDate(a.startTime)}&nbsp;&nbsp;${fmtTime(a.startTime)}</span>
+      </div>
+      ${a.tarifa != null
+        ? `<span class="appt-rate">$${fmtMoney(a.tarifa)}</span>`
+        : `<span class="appt-rate no-rate">Sin tarifa</span>`}
+    </div>`).join('');
+
+  return `
+    <div class="staff-card">
+      <div class="staff-header">
+        <span class="staff-name">${esc(calName)}</span>
+        <div class="staff-meta">
+          <span class="badge">${appts.length} clase${appts.length !== 1 ? 's' : ''}</span>
+          <span class="staff-total">$${fmtMoney(total)}</span>
+        </div>
+      </div>
+      <div>${rows}</div>
+    </div>`;
+}
+
+/* ── LOAD ────────────────────────────────────────────────────── */
+async function load() {
+  const creds = loadCreds();
+  if (!creds) { showModal(); return; }
+
+  const fromVal  = el('dateFrom').value;
+  const toVal    = el('dateTo').value;
+  const staffId  = el('staffFilter').value;
+  const headers  = getHeaders(creds.token);
+  const locId    = creds.locationId;
+
+  if (!fromVal || !toVal) { showError('Selecciona un rango de fechas válido.'); return; }
+  if (startOfDay(fromVal) > endOfDay(toVal)) { showError('La fecha de inicio debe ser anterior o igual a la fecha final.'); return; }
+
+  const startMs = startOfDay(fromVal);
+  const endMs   = endOfDay(toVal);
+  const calsToQuery = staffId === 'all' ? CALENDARS : CALENDARS.filter(c => c.id === staffId);
+  const contactCache = {};
+
+  // Reset UI
+  el('loadingWrap').classList.remove('hidden');
+  el('resultsArea').innerHTML = '';
+  el('dashFooter').classList.add('hidden');
+  el('errorBox').classList.add('hidden');
+  el('totalShowed').textContent = '—';
+  el('totalPayNum').textContent = '—';
+  el('btnBuscar').disabled = true;
+
+  try {
+    setLoading('Obteniendo citas de los calendarios...');
+    const calData = await Promise.all(
+      calsToQuery.map(async cal => {
+        const events = await getEvents(cal.id, startMs, endMs, locId, headers);
+        const showed = events.filter(e =>
+          (e.appointmentStatus || e.status || '').toLowerCase() === 'showed'
+        );
+        return { cal, showed };
+      })
+    );
+
+    const contactIds = new Set();
+    calData.forEach(({ showed }) =>
+      showed.forEach(e => { if (e.contactId) contactIds.add(e.contactId); })
+    );
+
+    if (contactIds.size > 0) {
+      setLoading(`Obteniendo datos de ${contactIds.size} estudiante(s)...`);
+      await Promise.all([...contactIds].map(id => getContact(id, contactCache, headers)));
+    }
+
+    const staffData = calData.map(({ cal, showed }) => {
+      const appts = showed.map(e => {
+        const contact = e.contactId ? contactCache[e.contactId] : null;
+        const field   = contact?.customFields?.find(f => f.id === TARIFA_ID);
+        const raw     = field?.fieldValue ?? field?.value ?? null;
+        const tarifa  = (raw !== null && raw !== '') ? parseFloat(raw) : null;
+        return {
+          studentName: contact?.name || e.title || 'Contacto desconocido',
+          startTime:   e.startTime,
+          tarifa:      (tarifa !== null && !isNaN(tarifa)) ? tarifa : null,
+        };
+      }).sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+      return { cal, appts };
+    });
+
+    const activeStaff = staffData.filter(d => d.appts.length > 0);
+    const totalShowed = activeStaff.reduce((s, d) => s + d.appts.length, 0);
+    const totalPay    = activeStaff.reduce((s, d) =>
+      s + d.appts.reduce((ss, a) => ss + (a.tarifa ?? 0), 0), 0);
+
+    el('totalShowed').textContent = totalShowed;
+    el('totalPayNum').textContent = totalShowed > 0 ? fmtMoney(totalPay) : '0.00';
+
+    const area = el('resultsArea');
+    if (activeStaff.length === 0) {
+      area.innerHTML = `<div class="empty-results">No se encontraron clases asistidas en este rango de fechas.</div>`;
+    } else {
+      activeStaff.sort((a, b) => {
+        const tA = a.appts.reduce((s, x) => s + (x.tarifa ?? 0), 0);
+        const tB = b.appts.reduce((s, x) => s + (x.tarifa ?? 0), 0);
+        return tB !== tA ? tB - tA : b.appts.length - a.appts.length;
+      });
+      area.innerHTML = `<div class="staff-grid">${
+        activeStaff.map(({ cal, appts }) => renderCard(cal.name, appts)).join('')
+      }</div>`;
+    }
+
+    const footer = el('dashFooter');
+    footer.textContent = `Actualizado: ${new Date().toLocaleString('es-MX')}`;
+    footer.classList.remove('hidden');
+
+  } catch (err) {
+    showError(`Error: ${err.message}`);
+    if (err.message.includes('401') || err.message.includes('403')) {
+      showError(`Credenciales inválidas o expiradas. Haz clic en "⚙ Credenciales" para actualizarlas.`);
+    }
+    console.error(err);
+  } finally {
+    el('loadingWrap').classList.add('hidden');
+    el('btnBuscar').disabled = false;
+  }
+}
+
+/* ── UTILS ───────────────────────────────────────────────────── */
+function el(id) { return document.getElementById(id); }
+function setLoading(msg) { el('loadingText').textContent = msg; }
+function showError(msg) {
+  const box = el('errorBox');
+  box.textContent = msg;
+  box.classList.remove('hidden');
+}
+
+/* ── INIT APP ────────────────────────────────────────────────── */
+function initApp() {
+  const today  = new Date();
+  const monday = getMonday(today);
+  el('dateFrom').value = toDateInput(monday);
+  el('dateTo').value   = toDateInput(today);
+
+  // Populate staff dropdown (only once)
+  const sel = el('staffFilter');
+  if (sel.options.length === 1) {
+    CALENDARS.forEach(cal => {
+      const opt = document.createElement('option');
+      opt.value = cal.id;
+      opt.textContent = cal.name;
+      sel.appendChild(opt);
+    });
+  }
+
+  el('btnBuscar').addEventListener('click', load);
+  ['dateFrom','dateTo'].forEach(id =>
+    el(id).addEventListener('keydown', e => { if (e.key === 'Enter') load(); })
+  );
+
+  load();
+}
+
+/* ── BOOT ────────────────────────────────────────────────────── */
+const creds = loadCreds();
+if (creds) {
+  hideModal();
+  initApp();
+} else {
+  // Modal is visible by default; initApp runs after save
+}
+</script>
+</body>
+</html>

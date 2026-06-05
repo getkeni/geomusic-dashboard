@@ -27,133 +27,143 @@
       color: var(--text);
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       min-height: 100vh;
-      padding-bottom: 60px;
     }
 
-    /* ── CREDENTIALS MODAL ── */
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.85);
+    .hidden { display: none !important; }
+
+    /* ════════════════════════════════════════
+       LOGIN PAGE
+    ════════════════════════════════════════ */
+    #loginPage {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    /* Logo block */
+    .login-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .logo-mark {
+      width: 56px;
+      height: 56px;
+      background: var(--accent);
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 999;
-      padding: 20px;
-    }
-
-    .modal {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 32px;
-      width: 100%;
-      max-width: 440px;
-    }
-
-    .modal-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 24px;
-    }
-
-    .modal-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--accent);
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.05em;
       flex-shrink: 0;
     }
 
-    .modal-logo h2 {
-      font-size: 1.1rem;
+    .login-logo h1 {
+      font-size: 1.6rem;
       font-weight: 800;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
+      text-align: center;
     }
 
-    .modal-logo p {
-      font-size: 0.72rem;
+    .login-logo p {
+      font-size: 0.82rem;
       color: var(--muted);
+      text-align: center;
+      margin-top: -8px;
     }
 
-    .modal h3 {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .modal > p {
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-bottom: 24px;
-      line-height: 1.5;
-    }
-
-    .modal-field {
+    /* Form */
+    .login-field {
       display: flex;
       flex-direction: column;
-      gap: 5px;
-      margin-bottom: 14px;
+      gap: 6px;
+      margin-bottom: 16px;
     }
 
-    .modal-field label {
-      font-size: 0.68rem;
+    .login-field label {
+      font-size: 0.7rem;
       font-weight: 700;
-      letter-spacing: 0.07em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--muted);
     }
 
-    .modal-field input {
-      background: var(--input);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 0.85rem;
-      padding: 10px 12px;
-      outline: none;
-      transition: border-color 0.15s;
+    .login-field input {
       width: 100%;
-    }
-
-    .modal-field input:focus { border-color: var(--accent); }
-
-    .modal-field input.mono {
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 0.78rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+      font-size: 0.82rem;
       letter-spacing: 0.02em;
+      padding: 13px 16px;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
     }
 
-    .modal-error {
+    .login-field input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(232,41,76,.15);
+    }
+
+    .login-field input::placeholder { color: #444; }
+
+    .login-error {
       font-size: 0.78rem;
       color: var(--warn);
-      margin-bottom: 14px;
-      display: none;
+      min-height: 20px;
+      margin-bottom: 8px;
     }
 
-    .modal-footer {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .btn-save {
-      flex: 1;
-      height: 42px;
+    .btn-login {
+      width: 100%;
+      height: 48px;
       background: var(--accent);
       border: none;
-      border-radius: 9px;
+      border-radius: 10px;
       color: #fff;
       font-family: inherit;
-      font-size: 0.875rem;
+      font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
-      transition: background 0.15s;
+      transition: background 0.15s, transform 0.1s;
+      margin-top: 4px;
     }
 
-    .btn-save:hover { background: var(--hover); }
+    .btn-login:hover  { background: var(--hover); }
+    .btn-login:active { transform: scale(0.98); }
+    .btn-login:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .login-hint {
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 20px;
+      line-height: 1.5;
+    }
+
+    /* ════════════════════════════════════════
+       DASHBOARD PAGE
+    ════════════════════════════════════════ */
+    #dashPage {
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
 
     /* ── HEADER ── */
     header {
@@ -192,26 +202,26 @@
 
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
 
-    .brand-text h1 {
-      font-size: 1.1rem;
+    .brand-text h2 {
+      font-size: 1.05rem;
       font-weight: 800;
       letter-spacing: -0.02em;
     }
 
     .brand-text p {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: var(--muted);
       font-weight: 500;
       margin-top: 1px;
     }
 
-    .btn-settings {
+    .btn-logout {
       background: transparent;
       border: 1px solid var(--border);
       border-radius: 8px;
       color: var(--muted);
       font-family: inherit;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 600;
       padding: 6px 12px;
       cursor: pointer;
@@ -219,7 +229,7 @@
       white-space: nowrap;
     }
 
-    .btn-settings:hover { border-color: var(--accent); color: var(--text); }
+    .btn-logout:hover { border-color: var(--warn); color: var(--warn); }
 
     /* ── FILTER BAR ── */
     .filter-bar {
@@ -298,6 +308,25 @@
     .btn-buscar:hover  { background: var(--hover); }
     .btn-buscar:active { transform: scale(0.97); }
     .btn-buscar:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-quick {
+      height: 38px;
+      padding: 0 14px;
+      background: transparent;
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      color: var(--accent);
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      align-self: flex-end;
+      white-space: nowrap;
+    }
+
+    .btn-quick:hover  { background: var(--accent); color: #fff; }
+    .btn-quick:active { background: var(--hover); border-color: var(--hover); color: #fff; }
 
     /* ── MAIN ── */
     main {
@@ -505,95 +534,339 @@
       margin-top: 36px;
     }
 
-    .hidden { display: none !important; }
+    /* ── PDF BUTTON ── */
+    .btn-pdf {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 38px;
+      padding: 0 20px;
+      background: transparent;
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      color: var(--accent);
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn-pdf:hover { background: var(--accent); color: #fff; }
+    .btn-pdf:active { background: var(--hover); border-color: var(--hover); color: #fff; }
+
+    .pdf-bar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 16px;
+    }
+
+    /* ── PRINT HEADER (solo visible en PDF) ── */
+    #printHeader {
+      display: none;
+    }
+
+    /* ════════════════════════════════════════
+       PRINT / PDF STYLES
+    ════════════════════════════════════════ */
+    @media print {
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+      /* Ocultar todo lo de la pantalla */
+      header, #loginPage, .pdf-bar, .dash-footer { display: none !important; }
+
+      /* Reset de colores: documento blanco */
+      body, #dashPage, main {
+        background: #fff !important;
+        color: #111 !important;
+      }
+
+      #dashPage { padding: 0 !important; }
+      main { padding: 0 16px !important; max-width: 100% !important; }
+
+      /* ── ENCABEZADO DEL REPORTE ── */
+      #printHeader {
+        display: block !important;
+        padding: 0 0 14px 0;
+        margin-bottom: 20px;
+        border-bottom: 3px solid #E8294C;
+      }
+
+      #printHeader .ph-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 8px;
+      }
+
+      #printHeader .ph-dot {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: #E8294C;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #printHeader .ph-dot::after {
+        content: 'G';
+        color: #fff;
+        font-weight: 900;
+        font-size: 1.1rem;
+      }
+
+      #printHeader .ph-title {
+        font-size: 1.3rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: #111;
+      }
+
+      #printHeader .ph-sub {
+        font-size: 0.75rem;
+        color: #666;
+        font-weight: 500;
+        margin-top: 1px;
+      }
+
+      #printHeader .ph-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        font-size: 0.78rem;
+        color: #555;
+      }
+
+      #printHeader .ph-meta strong {
+        color: #111;
+        font-weight: 700;
+      }
+
+      /* ── RESUMEN GLOBAL ── */
+      .summary-card {
+        background: #f7f7f7 !important;
+        border: 1px solid #ddd !important;
+        border-radius: 10px !important;
+        padding: 16px 22px !important;
+        margin-bottom: 24px !important;
+        break-inside: avoid;
+      }
+
+      .stat label { color: #666 !important; }
+      .stat .val  { font-size: 2rem !important; color: #E8294C !important; }
+      .stat .val sup { font-size: 1rem !important; }
+
+      /* ── TARJETAS DE PROFESOR ── */
+      .staff-grid {
+        display: block !important;
+      }
+
+      .staff-card {
+        background: #fff !important;
+        border: 1px solid #ddd !important;
+        border-radius: 10px !important;
+        margin-bottom: 20px !important;
+        break-inside: avoid;
+        overflow: visible !important;
+      }
+
+      .staff-header {
+        background: #f2f2f2 !important;
+        border-bottom: 1px solid #ddd !important;
+        padding: 10px 16px !important;
+        border-radius: 10px 10px 0 0 !important;
+      }
+
+      .staff-name {
+        font-size: 0.95rem !important;
+        font-weight: 700 !important;
+        color: #111 !important;
+      }
+
+      .badge {
+        background: #E8294C !important;
+        color: #fff !important;
+        font-size: 0.65rem !important;
+        padding: 2px 7px !important;
+        border-radius: 4px !important;
+      }
+
+      .staff-total {
+        font-size: 1rem !important;
+        font-weight: 800 !important;
+        color: #E8294C !important;
+      }
+
+      /* ── FILAS DE CLASES: aspecto de tabla ── */
+      .appt-row {
+        display: flex !important;
+        align-items: center !important;
+        padding: 7px 16px !important;
+        border-bottom: 1px solid #eee !important;
+        background: #fff !important;
+      }
+
+      .appt-row:nth-child(even) { background: #fafafa !important; }
+      .appt-row:last-child { border-bottom: none !important; }
+      .appt-row:hover { background: transparent !important; }
+
+      .appt-left { flex: 1 !important; }
+
+      .appt-student {
+        font-size: 0.82rem !important;
+        font-weight: 600 !important;
+        color: #111 !important;
+      }
+
+      .appt-time {
+        font-size: 0.7rem !important;
+        color: #666 !important;
+      }
+
+      .appt-rate {
+        font-size: 0.9rem !important;
+        font-weight: 700 !important;
+        color: #111 !important;
+      }
+
+      .appt-rate.no-rate {
+        color: #E8294C !important;
+        font-size: 0.7rem !important;
+        font-style: italic !important;
+      }
+    }
   </style>
 </head>
 <body>
 
-<!-- ── CREDENTIALS MODAL ── -->
-<div class="modal-backdrop" id="modalBackdrop">
-  <div class="modal">
-    <div class="modal-logo">
-      <div class="modal-dot"></div>
-      <div>
-        <h2>GeoMusic Academy</h2>
-        <p>Payroll Dashboard</p>
-      </div>
+<!-- ════════════════════════════════════════
+     LOGIN PAGE
+════════════════════════════════════════ -->
+<div id="loginPage">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="logo-mark">G</div>
+      <h1>GeoMusic Academy</h1>
+      <p>Payroll Dashboard</p>
     </div>
-    <h3>Configurar credenciales</h3>
-    <p>Tus credenciales se guardan únicamente en este navegador (localStorage). No se envían a ningún servidor externo.</p>
-    <div class="modal-field">
-      <label>PIT Token</label>
-      <input class="mono" type="password" id="inputToken" placeholder="pit-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" autocomplete="off">
+
+    <div class="login-field">
+      <label>Access Token</label>
+      <input
+        type="password"
+        id="inputToken"
+        placeholder="pit-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+      >
     </div>
-    <div class="modal-field">
-      <label>Location ID</label>
-      <input class="mono" type="text" id="inputLocation" placeholder="WlcttFpxFSQnNo1iB48V" autocomplete="off">
-    </div>
-    <div class="modal-error" id="modalError">Por favor completa ambos campos.</div>
-    <div class="modal-footer">
-      <button class="btn-save" id="btnSaveCreds">Guardar y continuar</button>
-    </div>
+
+    <div class="login-error" id="loginError"></div>
+
+    <button class="btn-login" id="btnLogin">Ingresar</button>
+
+    <p class="login-hint">Tu token se guarda en sessionStorage y se borra<br>al cerrar la pestaña.</p>
   </div>
 </div>
 
-<!-- ── HEADER ── -->
-<header>
-  <div class="header-top">
-    <div class="brand">
-      <div class="brand-dot"></div>
-      <div class="brand-text">
-        <h1>GeoMusic Academy</h1>
-        <p>Payroll Dashboard</p>
+<!-- ════════════════════════════════════════
+     DASHBOARD PAGE
+════════════════════════════════════════ -->
+<div id="dashPage" class="hidden">
+  <header>
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-dot"></div>
+        <div class="brand-text">
+          <h2>GeoMusic Academy</h2>
+          <p>Payroll Dashboard</p>
+        </div>
+      </div>
+      <button class="btn-logout" id="btnLogout">Cerrar sesión</button>
+    </div>
+
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label>Desde</label>
+        <input type="date" id="dateFrom">
+      </div>
+      <div class="filter-group">
+        <label>Hasta</label>
+        <input type="date" id="dateTo">
+      </div>
+      <button class="btn-quick" id="btn7d">Últimos 7 días</button>
+      <button class="btn-quick" id="btn14d">Últimos 14 días</button>
+      <div class="filter-group">
+        <label>Profesor</label>
+        <select id="staffFilter">
+          <option value="all">Todos los profesores</option>
+        </select>
+      </div>
+      <button class="btn-buscar" id="btnBuscar">Buscar</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Solo visible al imprimir/exportar PDF -->
+    <div id="printHeader">
+      <div class="ph-brand">
+        <div class="ph-dot"></div>
+        <div>
+          <div class="ph-title">GeoMusic Academy</div>
+          <div class="ph-sub">Reporte de Nómina</div>
+        </div>
+      </div>
+      <div class="ph-meta">
+        <span>Periodo: <strong id="phPeriod">—</strong></span>
+        <span>Profesor: <strong id="phProfesor">—</strong></span>
+        <span>Generado: <strong id="phFecha">—</strong></span>
       </div>
     </div>
-    <button class="btn-settings" id="btnSettings">⚙ Credenciales</button>
-  </div>
 
-  <div class="filter-bar">
-    <div class="filter-group">
-      <label>Desde</label>
-      <input type="date" id="dateFrom">
+    <div class="summary-card">
+      <div class="stat">
+        <label>Clases asistidas</label>
+        <div class="val" id="totalShowed">—</div>
+      </div>
+      <div class="stat">
+        <label>Total a pagar</label>
+        <div class="val"><sup>$</sup><span id="totalPayNum">—</span></div>
+      </div>
     </div>
-    <div class="filter-group">
-      <label>Hasta</label>
-      <input type="date" id="dateTo">
-    </div>
-    <div class="filter-group">
-      <label>Profesor</label>
-      <select id="staffFilter">
-        <option value="all">Todos los profesores</option>
-      </select>
-    </div>
-    <button class="btn-buscar" id="btnBuscar">Buscar</button>
-  </div>
-</header>
 
-<main>
-  <div class="summary-card">
-    <div class="stat">
-      <label>Clases asistidas</label>
-      <div class="val" id="totalShowed">—</div>
+    <div class="error-box hidden" id="errorBox"></div>
+
+    <div class="loading-wrap hidden" id="loadingWrap">
+      <div class="spinner"></div>
+      <div id="loadingText">Cargando citas...</div>
     </div>
-    <div class="stat">
-      <label>Total a pagar</label>
-      <div class="val"><sup>$</sup><span id="totalPayNum">—</span></div>
+
+    <div class="pdf-bar hidden" id="pdfBar">
+      <button class="btn-pdf" id="btnPdf">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Descargar PDF
+      </button>
     </div>
-  </div>
 
-  <div class="error-box hidden" id="errorBox"></div>
-
-  <div class="loading-wrap hidden" id="loadingWrap">
-    <div class="spinner"></div>
-    <div id="loadingText">Cargando citas...</div>
-  </div>
-
-  <div id="resultsArea"></div>
-  <div class="dash-footer hidden" id="dashFooter"></div>
-</main>
+    <div id="resultsArea"></div>
+    <div class="dash-footer hidden" id="dashFooter"></div>
+  </main>
+</div>
 
 <script>
-/* ── CALENDARS ───────────────────────────────────────────────── */
+/* ── CONSTANTS ───────────────────────────────────────────────── */
+const LOC_ID    = 'WlcttFpxFSQnNo1iB48V';
+const TARIFA_ID = '8bpHdD0VNmqbAkXgEsFU';
+const BASE      = 'https://services.leadconnectorhq.com';
+const TOKEN_KEY = 'geomusic_token';
+
 const CALENDARS = [
   { name: 'Homework Help & Study Support', id: '6c1uYVcCv7shvPYTIBiC' },
   { name: 'Fromo Somo',                    id: '7V461wVh10o9LkQ8YIEU' },
@@ -612,62 +885,45 @@ const CALENDARS = [
   { name: 'Online Tutoring Sessions',      id: 'uN7XdCI3HLQY4NileCi3' },
 ];
 
-const TARIFA_ID = '8bpHdD0VNmqbAkXgEsFU';
-const BASE      = 'https://services.leadconnectorhq.com';
-const STORE_KEY = 'geomusic_creds';
+/* ── AUTH ────────────────────────────────────────────────────── */
+function getToken()        { return sessionStorage.getItem(TOKEN_KEY); }
+function setToken(t)       { sessionStorage.setItem(TOKEN_KEY, t); }
+function clearToken()      { sessionStorage.removeItem(TOKEN_KEY); }
+function hdrs(token)       { return { 'Authorization': `Bearer ${token}`, 'Version': '2021-07-28' }; }
 
-/* ── CREDENTIALS ─────────────────────────────────────────────── */
-function loadCreds() {
-  try { return JSON.parse(localStorage.getItem(STORE_KEY)) || null; }
-  catch { return null; }
+function showLogin(errorMsg) {
+  el('dashPage').classList.add('hidden');
+  el('loginPage').classList.remove('hidden');
+  el('inputToken').value = '';
+  el('loginError').textContent = errorMsg || '';
+  setTimeout(() => el('inputToken').focus(), 50);
 }
 
-function saveCreds(token, locationId) {
-  localStorage.setItem(STORE_KEY, JSON.stringify({ token, locationId }));
+function showDash() {
+  el('loginPage').classList.add('hidden');
+  el('dashPage').classList.remove('hidden');
 }
 
-function getHeaders(token) {
-  return { 'Authorization': `Bearer ${token}`, 'Version': '2021-07-28' };
-}
+/* ── LOGIN LOGIC ─────────────────────────────────────────────── */
+el('btnLogin').addEventListener('click', handleLogin);
+el('inputToken').addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
 
-/* ── MODAL ───────────────────────────────────────────────────── */
-const backdrop = el('modalBackdrop');
-
-function showModal(prefill) {
-  if (prefill) {
-    el('inputToken').value    = prefill.token    || '';
-    el('inputLocation').value = prefill.locationId || '';
-  }
-  backdrop.classList.remove('hidden');
-}
-
-function hideModal() {
-  backdrop.classList.add('hidden');
-}
-
-el('btnSaveCreds').addEventListener('click', () => {
-  const token      = el('inputToken').value.trim();
-  const locationId = el('inputLocation').value.trim();
-  const errEl      = el('modalError');
-
-  if (!token || !locationId) {
-    errEl.style.display = 'block';
+function handleLogin() {
+  const token = el('inputToken').value.trim();
+  if (!token) {
+    el('loginError').textContent = 'Por favor ingresa tu Access Token.';
     return;
   }
-  errEl.style.display = 'none';
-  saveCreds(token, locationId);
-  hideModal();
-  initApp();
-});
+  el('loginError').textContent = '';
+  setToken(token);
+  showDash();
+  initDash();
+}
 
-el('btnSettings').addEventListener('click', () => {
-  showModal(loadCreds());
+el('btnLogout').addEventListener('click', () => {
+  clearToken();
+  showLogin();
 });
-
-// Allow Enter key in modal inputs
-['inputToken','inputLocation'].forEach(id =>
-  el(id).addEventListener('keydown', e => { if (e.key === 'Enter') el('btnSaveCreds').click(); })
-);
 
 /* ── DATE HELPERS ───────────────────────────────────────────── */
 function getMonday(d) {
@@ -679,79 +935,83 @@ function getMonday(d) {
 }
 
 function toDateInput(d) {
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 
-function startOfDay(dateStr) {
-  const [y, m, d] = dateStr.split('-').map(Number);
-  return new Date(y, m - 1, d, 0, 0, 0, 0).getTime();
+function startOfDay(s) {
+  const [y,m,d] = s.split('-').map(Number);
+  return new Date(y, m-1, d, 0, 0, 0, 0).getTime();
 }
 
-function endOfDay(dateStr) {
-  const [y, m, d] = dateStr.split('-').map(Number);
-  return new Date(y, m - 1, d, 23, 59, 59, 999).getTime();
+function endOfDay(s) {
+  const [y,m,d] = s.split('-').map(Number);
+  return new Date(y, m-1, d, 23, 59, 59, 999).getTime();
 }
 
 function fmtDate(iso) {
-  return new Date(iso).toLocaleDateString('es-MX', { weekday: 'short', month: 'short', day: 'numeric' });
+  return new Date(iso).toLocaleDateString('es-MX', { weekday:'short', month:'short', day:'numeric' });
 }
 
 function fmtTime(iso) {
-  return new Date(iso).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+  return new Date(iso).toLocaleTimeString('es-MX', { hour:'2-digit', minute:'2-digit' });
 }
 
 function fmtMoney(n) {
-  return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return n.toLocaleString('en-US', { minimumFractionDigits:2, maximumFractionDigits:2 });
 }
 
 function esc(s) {
-  return String(s ?? '')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 /* ── API ─────────────────────────────────────────────────────── */
-async function apiFetch(path, headers) {
-  const res = await fetch(`${BASE}${path}`, { headers });
+async function apiFetch(path) {
+  const token = getToken();
+  const res = await fetch(`${BASE}${path}`, { headers: hdrs(token) });
+
+  if (res.status === 401) {
+    clearToken();
+    showLogin('Sesión expirada. Por favor ingresa tu token nuevamente.');
+    throw new Error('401');
+  }
+
   if (!res.ok) {
     const txt = await res.text().catch(() => '');
-    throw new Error(`HTTP ${res.status} — ${path.split('?')[0]}\n${txt.slice(0, 200)}`);
+    throw new Error(`HTTP ${res.status} — ${path.split('?')[0]}\n${txt.slice(0,200)}`);
   }
   return res.json();
 }
 
-async function getEvents(calendarId, startMs, endMs, locationId, headers) {
+async function getEvents(calId, startMs, endMs) {
   try {
     const data = await apiFetch(
-      `/calendars/events?locationId=${locationId}&calendarId=${calendarId}&startTime=${startMs}&endTime=${endMs}`,
-      headers
+      `/calendars/events?locationId=${LOC_ID}&calendarId=${calId}&startTime=${startMs}&endTime=${endMs}`
     );
     return data.events || [];
   } catch (e) {
-    console.warn('Events error:', calendarId, e.message);
+    if (e.message === '401') throw e;
+    console.warn('Events error:', calId, e.message);
     return [];
   }
 }
 
-async function getContact(id, cache, headers) {
-  if (id in cache) return cache[id];
+const contactCache = {};
+async function getContact(id) {
+  if (id in contactCache) return contactCache[id];
   try {
-    const data = await apiFetch(`/contacts/${id}`, headers);
-    cache[id] = data.contact ?? null;
-  } catch {
-    cache[id] = null;
+    const data = await apiFetch(`/contacts/${id}`);
+    contactCache[id] = data.contact ?? null;
+  } catch (e) {
+    if (e.message === '401') throw e;
+    contactCache[id] = null;
   }
-  return cache[id];
+  return contactCache[id];
 }
 
 /* ── RENDER ──────────────────────────────────────────────────── */
 function renderCard(calName, appts) {
   const total = appts.reduce((s, a) => s + (a.tarifa ?? 0), 0);
-
-  const rows = appts.map(a => `
+  const rows  = appts.map(a => `
     <div class="appt-row">
       <div class="appt-left">
         <span class="appt-student">${esc(a.studentName)}</span>
@@ -767,7 +1027,7 @@ function renderCard(calName, appts) {
       <div class="staff-header">
         <span class="staff-name">${esc(calName)}</span>
         <div class="staff-meta">
-          <span class="badge">${appts.length} clase${appts.length !== 1 ? 's' : ''}</span>
+          <span class="badge">${appts.length} clase${appts.length!==1?'s':''}</span>
           <span class="staff-total">$${fmtMoney(total)}</span>
         </div>
       </div>
@@ -775,30 +1035,28 @@ function renderCard(calName, appts) {
     </div>`;
 }
 
-/* ── LOAD ────────────────────────────────────────────────────── */
+/* ── LOAD DATA ───────────────────────────────────────────────── */
 async function load() {
-  const creds = loadCreds();
-  if (!creds) { showModal(); return; }
+  const fromVal = el('dateFrom').value;
+  const toVal   = el('dateTo').value;
+  const staffId = el('staffFilter').value;
 
-  const fromVal  = el('dateFrom').value;
-  const toVal    = el('dateTo').value;
-  const staffId  = el('staffFilter').value;
-  const headers  = getHeaders(creds.token);
-  const locId    = creds.locationId;
+  if (!fromVal || !toVal) { showDashError('Selecciona un rango de fechas válido.'); return; }
+  if (startOfDay(fromVal) > endOfDay(toVal)) { showDashError('La fecha de inicio debe ser anterior o igual a la fecha final.'); return; }
 
-  if (!fromVal || !toVal) { showError('Selecciona un rango de fechas válido.'); return; }
-  if (startOfDay(fromVal) > endOfDay(toVal)) { showError('La fecha de inicio debe ser anterior o igual a la fecha final.'); return; }
-
-  const startMs = startOfDay(fromVal);
-  const endMs   = endOfDay(toVal);
+  const startMs     = startOfDay(fromVal);
+  const endMs       = endOfDay(toVal);
   const calsToQuery = staffId === 'all' ? CALENDARS : CALENDARS.filter(c => c.id === staffId);
-  const contactCache = {};
+
+  // Clear contact cache per search
+  Object.keys(contactCache).forEach(k => delete contactCache[k]);
 
   // Reset UI
   el('loadingWrap').classList.remove('hidden');
   el('resultsArea').innerHTML = '';
   el('dashFooter').classList.add('hidden');
   el('errorBox').classList.add('hidden');
+  el('pdfBar').classList.add('hidden');
   el('totalShowed').textContent = '—';
   el('totalPayNum').textContent = '—';
   el('btnBuscar').disabled = true;
@@ -807,8 +1065,8 @@ async function load() {
     setLoading('Obteniendo citas de los calendarios...');
     const calData = await Promise.all(
       calsToQuery.map(async cal => {
-        const events = await getEvents(cal.id, startMs, endMs, locId, headers);
-        const showed = events.filter(e =>
+        const events  = await getEvents(cal.id, startMs, endMs);
+        const showed  = events.filter(e =>
           (e.appointmentStatus || e.status || '').toLowerCase() === 'showed'
         );
         return { cal, showed };
@@ -816,13 +1074,11 @@ async function load() {
     );
 
     const contactIds = new Set();
-    calData.forEach(({ showed }) =>
-      showed.forEach(e => { if (e.contactId) contactIds.add(e.contactId); })
-    );
+    calData.forEach(({ showed }) => showed.forEach(e => { if (e.contactId) contactIds.add(e.contactId); }));
 
     if (contactIds.size > 0) {
       setLoading(`Obteniendo datos de ${contactIds.size} estudiante(s)...`);
-      await Promise.all([...contactIds].map(id => getContact(id, contactCache, headers)));
+      await Promise.all([...contactIds].map(getContact));
     }
 
     const staffData = calData.map(({ cal, showed }) => {
@@ -846,7 +1102,7 @@ async function load() {
       s + d.appts.reduce((ss, a) => ss + (a.tarifa ?? 0), 0), 0);
 
     el('totalShowed').textContent = totalShowed;
-    el('totalPayNum').textContent = totalShowed > 0 ? fmtMoney(totalPay) : '0.00';
+    el('totalPayNum').textContent = fmtMoney(totalPay);
 
     const area = el('resultsArea');
     if (activeStaff.length === 0) {
@@ -860,6 +1116,14 @@ async function load() {
       area.innerHTML = `<div class="staff-grid">${
         activeStaff.map(({ cal, appts }) => renderCard(cal.name, appts)).join('')
       }</div>`;
+
+      // Populate print header
+      const profSel   = el('staffFilter');
+      const profLabel = profSel.options[profSel.selectedIndex].text;
+      el('phPeriod').textContent   = `${fromVal} — ${toVal}`;
+      el('phProfesor').textContent = profLabel;
+      el('phFecha').textContent    = new Date().toLocaleString('es-MX');
+      el('pdfBar').classList.remove('hidden');
     }
 
     const footer = el('dashFooter');
@@ -867,10 +1131,7 @@ async function load() {
     footer.classList.remove('hidden');
 
   } catch (err) {
-    showError(`Error: ${err.message}`);
-    if (err.message.includes('401') || err.message.includes('403')) {
-      showError(`Credenciales inválidas o expiradas. Haz clic en "⚙ Credenciales" para actualizarlas.`);
-    }
+    if (err.message !== '401') showDashError(`Error: ${err.message}`);
     console.error(err);
   } finally {
     el('loadingWrap').classList.add('hidden');
@@ -881,20 +1142,20 @@ async function load() {
 /* ── UTILS ───────────────────────────────────────────────────── */
 function el(id) { return document.getElementById(id); }
 function setLoading(msg) { el('loadingText').textContent = msg; }
-function showError(msg) {
+function showDashError(msg) {
   const box = el('errorBox');
   box.textContent = msg;
   box.classList.remove('hidden');
 }
 
-/* ── INIT APP ────────────────────────────────────────────────── */
-function initApp() {
+/* ── INIT DASHBOARD ──────────────────────────────────────────── */
+function initDash() {
   const today  = new Date();
   const monday = getMonday(today);
   el('dateFrom').value = toDateInput(monday);
   el('dateTo').value   = toDateInput(today);
 
-  // Populate staff dropdown (only once)
+  // Populate staff dropdown once
   const sel = el('staffFilter');
   if (sel.options.length === 1) {
     CALENDARS.forEach(cal => {
@@ -906,20 +1167,33 @@ function initApp() {
   }
 
   el('btnBuscar').addEventListener('click', load);
+  el('btnPdf').addEventListener('click', () => window.print());
   ['dateFrom','dateTo'].forEach(id =>
     el(id).addEventListener('keydown', e => { if (e.key === 'Enter') load(); })
   );
+
+  function applyQuickRange(days) {
+    const to   = new Date();
+    const from = new Date();
+    from.setDate(from.getDate() - days);
+    el('dateFrom').value = toDateInput(from);
+    el('dateTo').value   = toDateInput(to);
+    load();
+  }
+
+  el('btn7d').addEventListener('click',  () => applyQuickRange(7));
+  el('btn14d').addEventListener('click', () => applyQuickRange(14));
 
   load();
 }
 
 /* ── BOOT ────────────────────────────────────────────────────── */
-const creds = loadCreds();
-if (creds) {
-  hideModal();
-  initApp();
+if (getToken()) {
+  showDash();
+  initDash();
 } else {
-  // Modal is visible by default; initApp runs after save
+  // loginPage is visible by default
+  setTimeout(() => el('inputToken').focus(), 50);
 }
 </script>
 </body>

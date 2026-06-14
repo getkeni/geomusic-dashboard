@@ -328,6 +328,22 @@
     .btn-quick:hover  { background: var(--accent); color: #fff; }
     .btn-quick:active { background: var(--hover); border-color: var(--hover); color: #fff; }
 
+    .btn-refresh {
+      height: 38px;
+      width: 38px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s, transform 0.3s;
+      align-self: flex-end;
+      flex-shrink: 0;
+    }
+    .btn-refresh:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-refresh.spinning { animation: spin 0.7s linear infinite; }
+
     /* ── MAIN ── */
     main {
       max-width: 1200px;
@@ -805,6 +821,7 @@
           <option value="all">Todos los profesores</option>
         </select>
       </div>
+      <button class="btn-refresh" id="btnRefresh" title="Actualizar lista de profesores">↻</button>
       <button class="btn-buscar" id="btnBuscar">Buscar</button>
     </div>
   </header>
@@ -867,23 +884,7 @@ const TARIFA_ID = '8bpHdD0VNmqbAkXgEsFU';
 const BASE      = 'https://services.leadconnectorhq.com';
 const TOKEN_KEY = 'geomusic_token';
 
-const CALENDARS = [
-  { name: 'Homework Help & Study Support', id: '6c1uYVcCv7shvPYTIBiC' },
-  { name: 'Fromo Somo',                    id: '7V461wVh10o9LkQ8YIEU' },
-  { name: 'Calendario de ADS',             id: '84KOPAlXvNuwXWG2gTsw' },
-  { name: 'Schedule an Appointment',       id: 'BH89p2TGLZikDxpmlC9n' },
-  { name: 'Marlene Vega',                  id: 'H0RKzsU2PzHE1YzTzWha' },
-  { name: 'Alberto Pablo Rojas Lopez',     id: 'MtWUnQDOYV0hhbpdkOXT' },
-  { name: 'Reserva tu clase Gratis',       id: 'V05rLHKqTupWWuOjy0Tc' },
-  { name: 'Test Preparation',              id: 'VoBbTvBExUcBPfOS3Bys' },
-  { name: 'Reynol del Corral',             id: 'hO4Vq3pN8Lv9Lwt2XEQx' },
-  { name: 'Adriana Suarez',                id: 'ltqxyo27RZf28x4tmRZA' },
-  { name: 'One-on-One Academic Tutoring',  id: 'nVIWIZVFJxewMjDmJ19m' },
-  { name: 'Marielle Bogady',               id: 'oaWxrPOl7O5jg50hWgk4' },
-  { name: 'Oscar Guerra',                  id: 'rWZ7BVn0HKWzO8FcCOaE' },
-  { name: 'Adriana Suárez (2)',            id: 'rhNJzMyXZVUyzVH19UkW' },
-  { name: 'Online Tutoring Sessions',      id: 'uN7XdCI3HLQY4NileCi3' },
-];
+let CALENDARS = [];
 
 /* ── AUTH ────────────────────────────────────────────────────── */
 function getToken()        { return sessionStorage.getItem(TOKEN_KEY); }
@@ -1148,6 +1149,37 @@ function showDashError(msg) {
   box.classList.remove('hidden');
 }
 
+function cleanCalName(name) {
+  return name.replace(/'s Personal Calendar\s*/i, '').replace(/Personal Calendar\s*/i, '').trim();
+}
+
+async function loadCalendars() {
+  const btn = el('btnRefresh');
+  btn.classList.add('spinning');
+  try {
+    const data = await apiFetch(`/calendars/?locationId=${LOC_ID}`);
+    CALENDARS = (data.calendars || [])
+      .filter(c => c.calendarType === 'personal' && /personal calendar/i.test(c.name))
+      .map(c => ({ id: c.id, name: cleanCalName(c.name) }))
+      .sort((a, b) => a.name.localeCompare(b.name, 'es'));
+
+    const sel = el('staffFilter');
+    const current = sel.value;
+    while (sel.options.length > 1) sel.remove(1);
+    CALENDARS.forEach(cal => {
+      const opt = document.createElement('option');
+      opt.value = cal.id;
+      opt.textContent = cal.name;
+      sel.appendChild(opt);
+    });
+    if ([...sel.options].some(o => o.value === current)) sel.value = current;
+  } catch(e) {
+    if (e.message !== '401') console.warn('Error cargando calendarios:', e.message);
+  } finally {
+    btn.classList.remove('spinning');
+  }
+}
+
 /* ── INIT DASHBOARD ──────────────────────────────────────────── */
 function initDash() {
   const today  = new Date();
@@ -1155,19 +1187,9 @@ function initDash() {
   el('dateFrom').value = toDateInput(monday);
   el('dateTo').value   = toDateInput(today);
 
-  // Populate staff dropdown once
-  const sel = el('staffFilter');
-  if (sel.options.length === 1) {
-    CALENDARS.forEach(cal => {
-      const opt = document.createElement('option');
-      opt.value = cal.id;
-      opt.textContent = cal.name;
-      sel.appendChild(opt);
-    });
-  }
-
   el('btnBuscar').addEventListener('click', load);
   el('btnPdf').addEventListener('click', () => window.print());
+  el('btnRefresh').addEventListener('click', loadCalendars);
   ['dateFrom','dateTo'].forEach(id =>
     el(id).addEventListener('keydown', e => { if (e.key === 'Enter') load(); })
   );
@@ -1184,7 +1206,7 @@ function initDash() {
   el('btn7d').addEventListener('click',  () => applyQuickRange(7));
   el('btn14d').addEventListener('click', () => applyQuickRange(14));
 
-  load();
+  loadCalendars().then(() => load());
 }
 
 /* ── BOOT ────────────────────────────────────────────────────── */
